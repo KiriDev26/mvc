@@ -9,9 +9,10 @@
 namespace Controller;
 
 use app\User;
+use core\Controller;
 
 
-class UserController
+class UserController extends Controller
 {
     public function form($id = null)
     {

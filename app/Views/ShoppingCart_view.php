@@ -1,11 +1,9 @@
 <?php
 require_once  "header.php";
-
 ?>
 <body role="document">
 
 <!-- Fixed navbar -->
-
 <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
         <div class="navbar-header">
@@ -20,14 +18,11 @@ require_once  "header.php";
             <a class="navbar-brand" href="#">Bootstrap theme</a>
         </div>
         <div style="float: right; margin-left: 20px">
-        <button type="button"  class="btn btn-default " style="margin-top: 8.5%;"><a href="indexToCart" <span class ='glyphicon glyphicon-shopping-cart'></span>Корзина</a></button>
+            <button type="button"  class="btn btn-default " style="margin-top: 8.5%;" onclick="Location: indexToCart"> <span class ='glyphicon glyphicon-shopping-cart'></span>Корзина</button>
             <span id = 'cartCount' style="background-color: #00cc00 "><?php if(count($_SESSION['ShoppingCart'])>0){
-                   print_r( count($_SESSION['ShoppingCart'])); } else{print 'пусто';}
-
-
-               ?>
+                    print_r( count($_SESSION['ShoppingCart'])); } else{print 'пусто';}
+                ?>
             </span>
-
         </div>
         <form class="navbar-form navbar-right" role="search" action="search" method="get">
             <div class="form-group">
@@ -107,121 +102,66 @@ require_once  "header.php";
         </div>
     </div>
     <div class="page-header">
-        <h1>Table Product</h1>
-    <div>
-        <button class='btn btn-lg btn-success'>
-            <a href='product/create'> Добавить</a>
-        </button>
+        <h1>Table Cart</h1>
+        <div>
+            <table class="table table-hover">
 
-        <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>ID товара</th>
+                    <th>Название товара</th>
+                    <th>Категория товара</th>
+                    <th>Цена на товар </th>
+                    <th>Количество товара</th>
+                    <th>Описание товара</th>
+                    <th>Рез. цена</th>
 
-            <thead>
-            <tr>
-                <th>ID товара</th>
-                <th>Название товара</th>
-                <th>Категория товара</th>
-                <th>Цена на товар </th>
-                <th>Описание товара</th>
-            </tr>
-            </thead>
-            <tbody>
-            <form action="/groupAction" method="post" >
-                <div class="dropdown open">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Dropdown button
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <input class="dropdown-item" href="drop" type="submit" value="Удалить">
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                    </div>
-                </div>
-
-
-
-                <?php foreach ($array['Product'] as $key => $value):  ?>
-                    
-                    <tr>
-                                  
-                                  <td>
-                                    <span class='checkbox'>
-                                    <input type='checkbox' name="checkboxGroup[]"  value="<?=$value['id']?>" />
+                </tr>
+                </thead>
+                <tbody>
+                <form method="post" action="/indexToOrder" >
+                            <?php foreach ($array as $key => $value):  ?>
+                            <tr>
+                                <td>
+                                    <?=$value[0]['id']?>
+                                </td>
+                                <td>
+                                    <?=$value[0]['name']?>
+                                </td>
+                                <td>
+                                    <?=$value[0]['title']?>
+                                </td>
+                                <td>
+                                    <span id="price_<?=$value[0]['id']?>"  value="<?= $value[0]['price']?>">
+                                        <?=$value[0]['price']?>
                                     </span>
+                                </td>
+                                <td>
+                                    <input  id="quantity_<?=$value[0]['id']?>" type="number" value="1" name="quantity_<?=$value[0]['id']?>" onchange="calculator(<?=$value[0]['id']?>)">
+                                </td>
+                                <td>
+                                    <?=$value[0]['description']?>
+                                </td>
+
+                                <td>
+                                    <span id="priceOne_<?=$value[0]['id']?>" class="resultOne" value="<?= $value[0]['price']?>">
+                                        <?= $value[0]['price']?>
+                                    </span>
+                                </td>
+                            </tr>
 
 
-                                      <?=$value['id']?>
-                                    
-                                  </td> 
-                                  <td>
-                                      <?=$value['name']?>
-                                  </td> 
-                                  <td>
-                                    <?=$value['category_id']?>
-                                  </td> 
-                                  <td>
 
-                                      <?=$value['price']?>
-                                  </td> 
-                                  <td>
-                                      <?=$value['description']?>
 
-                                  </td> 
-                                  
-                                  <td>
-                                        <button class='btn btn-lg btn-info'>
-                                            <a href='product/read?id=<?=$value['id']?>'> Больше ...</a>
-                                        </button> 
-                                  </td>
-                                  <td>
-                                        <button class='btn btn-lg btn-warning'>
-                                            <a href='product/update?id=<?=$value['id']?>'> Изменить</a>
-                                        </button> 
-                                  </td>
-                                  <td>
-                                        <button class='btn btn-lg btn-danger'>
-                                            <a href='product/delete?id=<?=$value['id']?>'> Удалить</a>
-                                        </button> 
-                                  </td>
-                      </tr>
-                    <tr>
-                        <td>
-                            <a id = 'remove_in_cart_<?=$value['id']?>'    href='#' onclick="removeToProduct(<?=$value['id']?>); return false;"  alt = 'Удалить из корзины'>Удалить из корзины</a>
-                            <a id = 'add_to_cart_<?=$value['id']?>'  href='#' onclick="addToCart(<?=$value['id']?>);  return false;" alt = 'Добавить в корзину'> Добавить в корзину</a>
-                        </td>
+                            <?php endforeach;?>
+                    <tr id="result_<?=$value[0]['id']?>" class="sum">
+                        Сума заказа на товар:
                     </tr>
-
-                 <?php endforeach;?>
-            </form>
-            </td>
-            </tbody>
-        </table>
-        <ul class="pagination">
-            <?php
-
-
-                    if (isset($_GET['page']) && $_GET['page'] == 1) {
-
-                    } else {
-                        $preg_page = $_GET['page'] - 1;
-                        echo "<li><a href='?page={$preg_page}'>&laquo;</a></li>";
-                    }
-
-                    for ($d = 1; $d <= $pagination->number_links; $d++) {
-                        echo "<li><a href='?page={$d}'>" . $d . "</a></li>";
-                    };
-
-
-                    if (isset($_GET['page']) && $_GET['page'] >= $pagination->number_links) {
-
-                    } else {
-                        $page_next = $_GET['page'] + 1;
-                        echo "<li><a href='?page={$page_next}'>&raquo;</a></li>";
-                    }
-
-            ?>
-
-        </ul>
-    </div>
+                        </tbody>
+                    </table>
+                    </div>
+                    <input type="submit" >
+                </form>
     </div>
 
 

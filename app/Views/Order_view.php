@@ -1,6 +1,14 @@
 <?php
-require_once  "header.php";
+/**
+ * Created by PhpStorm.
+ * User: punk
+ * Date: 28.01.18
+ * Time: 14:09
+ */
 
+
+
+require_once  "header.php";
 ?>
 <body role="document">
 
@@ -20,14 +28,11 @@ require_once  "header.php";
             <a class="navbar-brand" href="#">Bootstrap theme</a>
         </div>
         <div style="float: right; margin-left: 20px">
-        <button type="button"  class="btn btn-default " style="margin-top: 8.5%;"><a href="indexToCart" <span class ='glyphicon glyphicon-shopping-cart'></span>Корзина</a></button>
+            <button type="button"  class="btn btn-default " style="margin-top: 8.5%;" onclick="Location: indexToCart"> <span class ='glyphicon glyphicon-shopping-cart'></span>Корзина</button>
             <span id = 'cartCount' style="background-color: #00cc00 "><?php if(count($_SESSION['ShoppingCart'])>0){
-                   print_r( count($_SESSION['ShoppingCart'])); } else{print 'пусто';}
-
-
-               ?>
+                    print_r( count($_SESSION['ShoppingCart'])); } else{print 'пусто';}
+                ?>
             </span>
-
         </div>
         <form class="navbar-form navbar-right" role="search" action="search" method="get">
             <div class="form-group">
@@ -107,123 +112,53 @@ require_once  "header.php";
         </div>
     </div>
     <div class="page-header">
-        <h1>Table Product</h1>
-    <div>
-        <button class='btn btn-lg btn-success'>
-            <a href='product/create'> Добавить</a>
-        </button>
-
-        <table class="table table-hover">
-
-            <thead>
-            <tr>
-                <th>ID товара</th>
-                <th>Название товара</th>
-                <th>Категория товара</th>
-                <th>Цена на товар </th>
-                <th>Описание товара</th>
-            </tr>
-            </thead>
-            <tbody>
-            <form action="/groupAction" method="post" >
-                <div class="dropdown open">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Dropdown button
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <input class="dropdown-item" href="drop" type="submit" value="Удалить">
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                    </div>
-                </div>
-
-
-
-                <?php foreach ($array['Product'] as $key => $value):  ?>
-                    
-                    <tr>
-                                  
-                                  <td>
-                                    <span class='checkbox'>
-                                    <input type='checkbox' name="checkboxGroup[]"  value="<?=$value['id']?>" />
-                                    </span>
-
-
-                                      <?=$value['id']?>
-                                    
-                                  </td> 
-                                  <td>
-                                      <?=$value['name']?>
-                                  </td> 
-                                  <td>
-                                    <?=$value['category_id']?>
-                                  </td> 
-                                  <td>
-
-                                      <?=$value['price']?>
-                                  </td> 
-                                  <td>
-                                      <?=$value['description']?>
-
-                                  </td> 
-                                  
-                                  <td>
-                                        <button class='btn btn-lg btn-info'>
-                                            <a href='product/read?id=<?=$value['id']?>'> Больше ...</a>
-                                        </button> 
-                                  </td>
-                                  <td>
-                                        <button class='btn btn-lg btn-warning'>
-                                            <a href='product/update?id=<?=$value['id']?>'> Изменить</a>
-                                        </button> 
-                                  </td>
-                                  <td>
-                                        <button class='btn btn-lg btn-danger'>
-                                            <a href='product/delete?id=<?=$value['id']?>'> Удалить</a>
-                                        </button> 
-                                  </td>
-                      </tr>
-                    <tr>
-                        <td>
-                            <a id = 'remove_in_cart_<?=$value['id']?>'    href='#' onclick="removeToProduct(<?=$value['id']?>); return false;"  alt = 'Удалить из корзины'>Удалить из корзины</a>
-                            <a id = 'add_to_cart_<?=$value['id']?>'  href='#' onclick="addToCart(<?=$value['id']?>);  return false;" alt = 'Добавить в корзину'> Добавить в корзину</a>
-                        </td>
-                    </tr>
-
-                 <?php endforeach;?>
-            </form>
-            </td>
-            </tbody>
-        </table>
-        <ul class="pagination">
-            <?php
-
-
-                    if (isset($_GET['page']) && $_GET['page'] == 1) {
-
-                    } else {
-                        $preg_page = $_GET['page'] - 1;
-                        echo "<li><a href='?page={$preg_page}'>&laquo;</a></li>";
-                    }
-
-                    for ($d = 1; $d <= $pagination->number_links; $d++) {
-                        echo "<li><a href='?page={$d}'>" . $d . "</a></li>";
-                    };
-
-
-                    if (isset($_GET['page']) && $_GET['page'] >= $pagination->number_links) {
-
-                    } else {
-                        $page_next = $_GET['page'] + 1;
-                        echo "<li><a href='?page={$page_next}'>&raquo;</a></li>";
-                    }
-
-            ?>
-
-        </ul>
+        <h1>Оформление заказа</h1>
     </div>
-    </div>
+    <div style="width: 50%">
+        <form action="post"></form>
+        <div class="form-group">
+            <label for="name">Имя</label>
+            <input class="form-control " type="text" name="name">
+            <label for="surname">Фамилия</label>
+            <input class="form-control " type="text" name="surname">
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input class="form-control " type="email" name="email">
+        </div>
+        <div class="form-group">
+            <label for="phone"> Номер телефона</label>
+            <input class="form-control " type="telephone" name="phone">
+        </div>
+        <div class="form-group">
+            <label for="city">Город доставки/Отделение новой почты</label>
+            <input class="form-control " type="text" name="city">
+        </div>
+        <div class="form-group">
+            <label for="payment-method">Способ оплаты</label>
+            <select class="form-control " type="text" name="payment-method">
+                <option value="#"></option>
+                <option value="#"></option>
+                <option value="#"></option>
+            </select>
+        </div>
+        <div>
+            <lable>Ваш заказ</lable>
+            <ol>
 
+            <?php foreach ($array['product'] as $key=>$value): Dbug($array)  ?>
+
+
+                    <li><?=$value['name']?></li>
+
+
+            <?php endforeach; ?>
+            </ol>
+        </div>
+    </div>
+    <button class="btn btn-lg btn-info">
+        <a href="indexOrder"> Оплатить</a>
+    </button>
 
     <div class="page-header">
         <h1>Wells</h1>

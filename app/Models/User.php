@@ -16,7 +16,7 @@ class User
 
     public function save()
     {
-        var_dump($this);
+        
         if ($this->id) {
             DB::getInstans()->Update();
         } else {

@@ -11,5 +11,15 @@ namespace core;
 
 class Controller
 {
+    
+
+    protected function render($view, $array = null)
+    {
+        extract($array);
+
+
+        require_once  $_SERVER['DOCUMENT_ROOT'] . "/app/Views/$view".".php";
+
+    }
 
 }

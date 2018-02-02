@@ -20,7 +20,7 @@ class DB
     public function __construct()
     {
 
-        $dsn = 'mysql:host=localhost;dbname=new mvc';
+        $dsn = 'mysql:host=localhost;dbname=new mvc;charset=utf8';
         $user = 'root';
         $password = 'cobaka98';
 
@@ -52,9 +52,7 @@ class DB
 
         }
 
-
-        //$allowed = array("name","surname","email"); // allowed fields
-        $sql = "INSERT INTO $table SET " . pdoSet($columns, $values);
+        $sql = "INSERT INTO $table SET " . pdoSet($table,$columns, $values);
         $stm = $this->dbh->prepare($sql);
         $this->dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
@@ -64,9 +62,9 @@ class DB
     }
 
 
-    public function select($table, $criteria)
+    public function select($sample, $table, $criteria)
     {
-        $sql = "SELECT * FROM $table WHERE $criteria";
+        $sql = "SELECT $sample FROM $table WHERE $criteria";
         
         $stmt = $this->dbh->query($sql);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -78,25 +76,24 @@ class DB
     public function update($table, $str, $criteria)
     {
         $columns = [];
-        //var_dump($str);
-
+        
 
         foreach ($str as $key => $value) {
             $columns[] = $key;
         }
-        $values["id"] = $_POST['id'];
-        $sql = "UPDATE $table SET " . pdoSet($columns, $values) . " WHERE $criteria ";
-        //var_dump($values);
+
+        
+        $values["id"] = $_POST['product']['id'];
+        $sql = "UPDATE $table SET " . pdoSet($table, $columns, $values) . " WHERE $criteria ";
+        
 
 
         $stm = $this->dbh->prepare($sql);
 
-        //var_dump($values);
-        //var_dump($columns);
         $this->dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         $stm->execute($values);
-        //var_dump($stm);
+
 
     }
 
@@ -114,7 +111,8 @@ class DB
     public function custom_query($sql)
     {
         $stmt = $this->dbh->query($sql);
-        $row = $stmt->fetchAll();
+        $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
         
         return $row;
         
@@ -124,16 +122,19 @@ class DB
 }
 
 
-function pdoSet($allowed, &$values, $source = array())
+function pdoSet($table, $allowed, &$values, $source = array())
 {
+    Dbug($table);
     $set = '';
     $values = array();
-    if (!$source) $source = &$_POST;
+    if (!$source) $source = &$_POST[$table];
+
+    Dbug($source);
     foreach ($allowed as $field) {
         if (isset($source[$field])) {
             $set .= "`" . str_replace("`", "``", $field) . "`" . "=:$field, ";
             $values[$field] = $source[$field];
-            //var_dump($set);
+            
 
         }
     }

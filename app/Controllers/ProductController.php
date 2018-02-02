@@ -10,102 +10,83 @@ namespace app\Controllers;
 
 use app\Models\Product;
 use app\classes\pagination;
+use app\classes\Search;
+use app\classes\GroupAction;
+use core\Controller;
 
 
-
-
-class ProductController 
+class ProductController extends Controller
 {
-   
 
-    
-    
+
     public function index_action()
     {
         $Product = new Product();
+        if (!isset($_GET['page'])) {
+            $_GET['page'] = 10;
+        }
+
         $pagination = new pagination($_GET['page'], 10, 'product');
-        $Product ->index($pagination->pageLink(), $pagination->default_page );
+        $output['Pagination'] = $Product->index('*', 'product', $pagination->pageLink(), $pagination->default_page);
+        $output['Product'] = $Product->index('*', 'product');
 
-        
-
-        
-        
-        
-        require_once  $_SERVER['DOCUMENT_ROOT'] . '/app/Views/Index_view.php';
-
-
-
+        Controller::render("Index_view", $output);
     }
-    
-    public function form_action()
-    {
-        require_once  $_SERVER['DOCUMENT_ROOT'] . '/app/Views/Update_view.php';
-        
-    }
-    
-    
-    
-    
+
+
     public function create_action()
     {
-        require_once $_SERVER['DOCUMENT_ROOT'] . '/app/Views/Create_view.php';
 
-        $name = $_POST['name'];
-        $category_id = $_POST['category_id'];
-        $price = $_POST['price'];
-        $description = $_POST['description'];
-        $row = [
-            'name' => $name,
-            'category_id' => $category_id,
-            'price' => $price,
-            'description' => $description,
-        ];
-        
         $Product = new Product();
-        $Product->create($row);
-        header("Location: http://localhost:8080/");
+        $output['Category'] = $Product->index('category.id, category.title', 'category', 0, 10);
+        Controller::render('Create_view', $output);
 
+        if (isset($_POST['add'])) {
+            foreach ($_POST['product'] as $key => $value) {
+
+                $row[$key] = $value;
+
+            }
+
+            $Product->create($row);
+            header("Location: http://localhost:8080/");
+
+        }
     }
-    
-    
-    
-    
+
+
     public function read_action()
     {
         $Product = new Product();
-        $Product->read($_GET['id']);
-        
-        require_once  $_SERVER['DOCUMENT_ROOT'] . '/app/Views/Read_view.php';
-        
+        $output[] = $Product->read($_GET['id']);
+
+        Controller::render('Read_view', $output);
+
     }
-    
-    
-    
-    
+
+
     public function update_action()
     {
+
         $Product = new Product();
-        $name = $_POST['name'];
-        $category_id = $_POST['category_id'];
-        $price = $_POST['price'];
-        $description =$_POST['description'];
-        $str =[
-            'name' => $name,
-            'category_id' => $category_id,
-            'price' => $price,
-            'description' => $description,
-        ];
-        //var_dump('Данные из формы', $str, '</br>');
+        $output['Category'] = $Product->index('category.id, category.title', 'category', 0, 10);
+        Controller::render('Update_view', $output);
 
-        $Product->updateOne($_POST['id'], $str);
-        header("Location: http://localhost:8080/");
 
+        if (isset($_POST['updateGo'])) {
+
+            foreach ($_POST['product'] as $key => $value) {
+
+                $row[$key] = $value;
+
+            }
+            $Product->UpdateOne($row['id'], $row);
+            header("Location: http://localhost:8080/");
+        }
 
     }
-    
-    
-    
-    
+
+
     public function delete_action()
     {
         $Product = new Product();
@@ -116,11 +97,23 @@ class ProductController
 
         $Product->deleteOne($id);
         header("Location: http://localhost:8080/");
-
-
     }
 
-    
-    
-    
+
+    public function search()
+    {
+        $Search = new Search($_GET['query']);
+        $Search->preparation();
+        require_once $_SERVER['DOCUMENT_ROOT'] . '/app/Views/Search_result.php';
+    }
+
+
+    public function group_action()
+    {
+        $GroupAction = new GroupAction($_POST['checkboxGroup']);
+        $GroupAction->dropGroup('product');
+        header("Location: http://localhost:8080/");
+    }
+
+
 }

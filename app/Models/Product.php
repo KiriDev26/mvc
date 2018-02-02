@@ -10,7 +10,7 @@ namespace app\Models;
 
 use DataBase\DB;
 use app\classes\pagination;
-
+use app\classes\Search;
 
 class Product
 {
@@ -21,49 +21,50 @@ class Product
     public $description;
     public $discount;
     public $amount;
-    
+
     public $row;
 
 
-
-    public function index($start, $end)
+    public function index($sample, $table, $start = null, $end = null)
     {
-        
-       $sql = "SELECT * FROM product LIMIT $start, $end ";
-       $this->row = DB::getInstance()->custom_query($sql);
+        if ($start == null && $end == null) {
+            $start = 0;
+            $end = 10;
+        }
+        $sql = "SELECT $sample FROM $table LIMIT $start, $end ";
+        $result = DB::getInstance()->custom_query($sql);
+
+
+        return $result;
     }
 
 
-    public function create( $row, $criteria = null)
+    public function create($row)
     {
-        if ($this->id) {
-            DB::getInstance()->update('product', $row, $criteria);
-        } else {
-            DB::getInstance()->insert('product', $row);
-        }
+        DB::getInstance()->insert('product', $row);
+
     }
 
 
     public function read($id)
     {
 
-        $this->row = DB::getInstance()->select('product', 'id =' . $id);
-        
+        $result = DB::getInstance()->select('*', 'product', 'id =' . $id);
 
+        return $result;
     }
 
 
     public function updateOne($id, $str)
     {
-        //var_dump('Массив модели', $str, '</br>');
-         DB::getInstance()->update('product', $str, 'id = ' . $id );
+        DB::getInstance()->update('product', $str, 'id = ' . $id);
 
     }
 
 
     public function deleteOne($id)
     {
-        DB::getInstance()->delete('product','id = '. $id );
-        
+        DB::getInstance()->delete('product', 'id = ' . $id);
+
     }
 }

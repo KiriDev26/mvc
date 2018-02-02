@@ -1,5 +1,5 @@
 
-
+<?php require_once  "header.php"; ?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -50,15 +50,16 @@
                 <tbody>
 
                 <tr>
-                    <?php foreach ($Product->row as $key=>$value){
-
-                        echo "<tr><td>$value</td></tr>";
+                    <?php foreach ($array[0] as $key=>$value){
+                        echo "<td>
+                                $value
+                              </td>";
 
                     }
 
                     ?>
                 </tr>
-                <?php echo  "<button class='btn btn-lg btn-danger' type='button'> <a href=read?id={$Product->row['id']}> прочитать</a></button> "?>
+                <?php echo  "<button class='btn btn-lg btn-danger' type='button'> <a href=read?id={$array[0]['id']}> прочитать</a></button> "?>
                 </tbody>
             </table>
         </div>

@@ -40,27 +40,32 @@
   
         <form action=update role="form" method="post" name="product">
             <div class="form-group">
-                <label for="id">ID</label>
-                <input class="form-control " type="text" name="id" >
+                <label for="id">Название</label>
+                <input class="form-control " type="number" name="product[id]" value='<?=$_GET['id'] ?>'>
             </div>
+            
             <div class="form-group">
                 <label for="name">Название</label>
-                <input class="form-control " type="text" name="name">
+                <input class="form-control " type="text" name="product[name]">
             </div>
             <div class="form-group">
                 <label for="category_id">Категория</label>
-                <input class="form-control" type="text" name="category_id">
+                <select class="form-control" type="text" name="product[category_id]">
+                   <?php foreach ($array['Category'] as $key=>$value): ?>
+                        <option value= '<?=$value['id']?>'><?=$value['title']?></option>
+                   <?php endforeach; ?>
+                </select>
             </div>
             <div class="form-group">
                 <label for="price"> Цена </label>
-                <input class="form-control" type="text" name="price">
+                <input class="form-control" type="text" name="product[price]">
             </div>
             <div class="form-group">
                 <label for="descriptio"> Описание </label>
-                <input id="description" class="form-control input-lg" type="text" name="description">
+                <input id="description" class="form-control input-lg" type="text" name="product[description]">
             </div>
             <div class="form-group">
-                <input class="btn btn-success" type="submit" value="Добавить">
+                <input class="btn btn-success" type="submit"  name="updateGo" value="Добавить">
             </div>
         </form>
 

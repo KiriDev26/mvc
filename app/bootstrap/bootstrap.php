@@ -11,18 +11,22 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 
 session_start();
+if (!isset($_SESSION['ShoppingCart'])) {
+    $_SESSION['ShoppingCart'] = array();
+}
 
-    $path = [
-     '/vendor/core/Model.php',
-     '/vendor/core/View.php',
-     '/vendor/core/Controller.php',
-     '/vendor/core/Loader.php',
-        
 
-    ];
+$path = [
+    '/vendor/core/Model',
+    '/vendor/core/View',
+    '/vendor/core/Controller',
+    '/vendor/core/Loader',
+    '/app/bootstrap/help'
 
- foreach ($path as $pth ) {
-     require_once $_SERVER['DOCUMENT_ROOT'] . $pth;
- };
 
-echo $_SERVER['DOCUMENT_ROOT'];
+];
+
+foreach ($path as $pth) {
+    require_once $_SERVER['DOCUMENT_ROOT'] . $pth . '.php';
+};
+
