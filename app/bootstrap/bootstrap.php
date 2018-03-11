@@ -17,10 +17,10 @@ if (!isset($_SESSION['ShoppingCart'])) {
 
 
 $path = [
-    '/vendor/core/Model',
-    '/vendor/core/View',
-    '/vendor/core/Controller',
-    '/vendor/core/Loader',
+    '/app/core/Model',
+    '/app/core/View',
+    '/app/core/Controller',
+    '/app/core/Loader',
     '/app/bootstrap/help'
 
 

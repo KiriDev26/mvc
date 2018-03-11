@@ -146,14 +146,14 @@ require_once  "header.php";
             <lable>Ваш заказ</lable>
             <ol>
 
-            <?php foreach ($array['product'] as $key=>$value): Dbug($array)  ?>
+                
 
-
-                    <li><?=$value['name']?></li>
-
-
+             <?php foreach ($array['product'] as $key=>$value): ?>
+                <li> <?= $value['name'] ?> <nobr> <?=$value['quantity']?> шт.</li>
             <?php endforeach; ?>
+             Сумма заказа: <?=$array['price']?> грн
             </ol>
+
         </div>
     </div>
     <button class="btn btn-lg btn-info">

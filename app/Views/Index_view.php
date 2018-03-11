@@ -9,8 +9,6 @@ require_once  "header.php";
 <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
         <div class="navbar-header">
-
-
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
@@ -140,7 +138,7 @@ require_once  "header.php";
 
 
                 <?php foreach ($array['Product'] as $key => $value):  ?>
-                    
+
                     <tr>
                                   
                                   <td>
@@ -153,10 +151,13 @@ require_once  "header.php";
                                     
                                   </td> 
                                   <td>
+
+                                      <img width="100px" height="100px" src="<?=\app\classes\Upload::ABSOLUTE_PATH.$value['img_id'] ?>"  alt="saf">
                                       <?=$value['name']?>
                                   </td> 
                                   <td>
-                                    <?=$value['category_id']?>
+                                        <?=$value['category_title']?>
+
                                   </td> 
                                   <td>
 
@@ -206,12 +207,12 @@ require_once  "header.php";
                         echo "<li><a href='?page={$preg_page}'>&laquo;</a></li>";
                     }
 
-                    for ($d = 1; $d <= $pagination->number_links; $d++) {
+                    for ($d = 1; $d <= $Pagination->number_links; $d++) {
                         echo "<li><a href='?page={$d}'>" . $d . "</a></li>";
                     };
 
 
-                    if (isset($_GET['page']) && $_GET['page'] >= $pagination->number_links) {
+                    if (isset($_GET['page']) && $_GET['page'] >= $Pagination->number_links) {
 
                     } else {
                         $page_next = $_GET['page'] + 1;

@@ -9,8 +9,9 @@
 namespace app\Models;
 
 use DataBase\DB;
+use vendor\core\Model;
 
-class ShoppingCart
+class ShoppingCart extends Model
 {
     public $Product;
     public $dataProduct;

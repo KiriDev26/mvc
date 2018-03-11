@@ -8,7 +8,7 @@ use DataBase\DB;
  * Class pagination
  * @package app\classes
  */
-class pagination
+class Pagination
 {
 
     private $pages; // Total records
@@ -17,14 +17,8 @@ class pagination
     public $start; // First value LIMIT
     public $number_links; // Number of pages
 
-    /**
-     * pagination constructor.
-     * @param $id идентификатор текущей страницы
-     * @param $count кол-во записей выводимых на странице
-     * @param $table таблица в которой подводить подсчёт записей
-     *
-     */
-    public function __construct($id, $count, $table)
+    
+    public function __construct($id = null, $count, $table)
     {
         if (!$id) $id = 1;
         
@@ -35,6 +29,7 @@ class pagination
         $sql = "SELECT COUNT(*) FROM $table";
         $row = DB::getInstance()->custom_query($sql);
         if(empty($row)) {
+            Dbug($row);
             $this->pages = $row['0']['0'];
         }
         $this->number_links = ceil($this->pages / $this->default_page);

@@ -36,10 +36,17 @@
     <body>
         <div class="col-md-5">
   
-        <form action='create'  role="form" method="post" name="product">
+        <form  enctype = multipart/form-data action='create'  role="form" method="post" name="product">
             <div class="form-group">
                 <label for="name">Название</label>
                 <input class="form-control " type="text" name="product[name]">
+            </div>
+            <div class="form-group">
+                <lable for="upload"></lable>
+                <!-- Поле MAX_FILE_SIZE должно быть указано до поля загрузки файла -->
+                <input type="hidden" name="MAX_FILE_SIZE" value="30000000000" />
+                <!-- Название элемента input определяет имя в массиве $_FILES -->
+                Отправить этот файл: <input name="img[path]" type="file" />
             </div>
             <div class="form-group">
                 <label for="category">Категория</label>

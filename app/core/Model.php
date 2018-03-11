@@ -10,7 +10,14 @@ namespace vendor\core;
 
 
 
+use DataBase\DB;
+
 class Model
 {
+    
+    protected function save($table, $row)
+    {
+        DB::getInstance()->insert($table, $row);
+    }
 
 }

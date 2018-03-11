@@ -33,6 +33,9 @@ class DB
         }
     }
 
+    /**
+     * @return DB
+     */
     public static function getInstance()
     {
         if (!self::$instance) {
@@ -118,18 +121,23 @@ class DB
         
     }
 
+    public function getLastInsertId($table)
+    {
+        return $this->dbh->lastInsertId($table);
+    }
+
 
 }
 
 
 function pdoSet($table, $allowed, &$values, $source = array())
 {
-    Dbug($table);
+   // Dbug($table);
     $set = '';
     $values = array();
     if (!$source) $source = &$_POST[$table];
 
-    Dbug($source);
+   // Dbug($source);
     foreach ($allowed as $field) {
         if (isset($source[$field])) {
             $set .= "`" . str_replace("`", "``", $field) . "`" . "=:$field, ";

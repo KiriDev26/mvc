@@ -9,9 +9,10 @@
 namespace app\Controllers;
 
 use app\Models\Product;
-use app\classes\pagination;
+use app\classes\Pagination;
 use app\classes\Search;
 use app\classes\GroupAction;
+use app\classes\Upload;
 use core\Controller;
 
 
@@ -26,18 +27,37 @@ class ProductController extends Controller
             $_GET['page'] = 10;
         }
 
-        $pagination = new pagination($_GET['page'], 10, 'product');
-        $output['Pagination'] = $Product->index('*', 'product', $pagination->pageLink(), $pagination->default_page);
+        $Pagination = new Pagination($_GET['page'], 10, 'product');
+        $output['Pagination'] = $Product->index('*', 'product', $Pagination->pageLink(), $Pagination->default_page);
+        $output['Category'] = $Product->index('category.id, category.title', 'category');
         $output['Product'] = $Product->index('*', 'product');
+        $output['Img'] = $Product->index('img.path, img.id', 'product  JOIN img ON product.img_id=img.id');
 
+
+        foreach ($output['Product'] as  &$product ){
+            foreach ($output['Category'] as $category){
+                if ($category['id'] == $product['category_id'] ) {
+                    $product['category_title'] = $category['title'];
+                }
+            }
+            foreach ($output['Img'] as $img){
+                if ($img['id'] == $product['img_id']) {
+                   $product['img_id'] = $img['path'];
+                }
+
+
+            }
+
+        }
+        Dbug($output);
         Controller::render("Index_view", $output);
     }
 
 
     public function create_action()
     {
-
         $Product = new Product();
+
         $output['Category'] = $Product->index('category.id, category.title', 'category', 0, 10);
         Controller::render('Create_view', $output);
 
@@ -47,11 +67,12 @@ class ProductController extends Controller
                 $row[$key] = $value;
 
             }
+            //header("Location: http://localhost:8080/");
 
-            $Product->create($row);
-            header("Location: http://localhost:8080/");
-
+            //Dbug($_FILES['img']['error']['path']);
+            $Product->create ($row, $_FILES);
         }
+
     }
 
 

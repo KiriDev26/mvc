@@ -6,7 +6,7 @@
  * Time: 18:14
  */
 
-namespace vendor\core;
+namespace app\core;
 
 
 class Router

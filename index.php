@@ -2,7 +2,7 @@
 
 require_once 'app/bootstrap/bootstrap.php';
 
-use vendor\core\Router;
+use app\core\Router;
 
 
 $loader = new Loader();

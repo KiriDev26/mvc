@@ -10,8 +10,9 @@ namespace app\Models;
 
 
 use DataBase\DB;
+use vendor\core\Model;
 
-class Order
+class Order extends Model
 {
     public $id;
     public $Product;
@@ -24,38 +25,38 @@ class Order
 
     public function index_order(array $Product)
     {
-        Dbug($Product);
-        foreach ($Product as $key => $value)
-        {
+        foreach ($Product as $key => $value) {
 
-           $price []=  DB::getInstance()->select('price', 'product', 'id='.$key );
+           $arr[][$value] =  DB::getInstance()->select('price', 'product', 'id='.$key );
            $result['product'][$key] = DB::getInstance()->select('name', 'product', 'id='.$key );
-           $result['quantity'][$key] = $value;
-        }
-        $array = array_merge($result['product'], $result['quantity'] );
-        Dbug($array);
-       
-        $result['price'] =  $this->calculator($Product,$price);
+           $result['product'][$key]['quantity'] = $value;
 
+        }
+        
+        $result['price'] =  $this->calculator($arr);
 
         return $result;
 
     }
 
 
-    private function calculator($Product, $price)
+
+    private function calculator($Product)
     {
-        foreach ($price as $key2=>$value2 )
-            
-        foreach ($Product as $key1 => $value1) {
-            
-            $result[$key1] =  (int)$value1 *   (int)$value2['price'];
-            
-        }
-        $this->totalOrder=array_sum($result);
+            foreach ($Product as $key) {
+                foreach ($key as $quantity => $price){
+                        $result_one[] = $quantity * $price['price'];
+                }
+            }
 
-        return $result;
+        $sum = array_sum($result_one);
+
+        
+        return $sum;
     }
+
+
+
 
 
 }

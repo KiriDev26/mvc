@@ -70,7 +70,6 @@ function calculator(id){
    // var arr = total.split(', ' * 1);
 
     //var result = array_sum(arr);
-    alert(total);
 
 }
 
